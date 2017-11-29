@@ -1,46 +1,37 @@
-import {Mongo} from 'meteor/mongo';
+import {Class} from 'meteor/jagi:astronomy';
+import {Persons} from '../collections/persons';
 
-const Persons = new Mongo.Collection('persons');
-
-Persons.attachSchema(new SimpleSchema({
-    first_name: {
-        type: String
-    },
-    last_name: {
-        type: String
-    },
-    userId: {
-        type: String,
-    },
-    date_birth: {
-        type: Date,
-    },
-    gender: {
-        type: String,
-    },
-    createdAt: {
-        type: Date,
-        autoValue() {
-            if (this.isInsert) {
+const Person = Class.create({
+    name: 'Person',
+    collection: Persons,
+    fields: {
+        firstName: {
+            type: String
+        },
+        lastName: {
+            type: String
+        },
+        userId: {
+            type: String,
+        },
+        dateBirth: {
+            type: Date,
+        },
+        gender: {
+            type: String,
+        },
+        createdAt: {
+            type: Date,
+            default: function () {
                 return new Date();
-            } else {
-                this.unset();
-            }
+            },
         },
     },
-
-}));
-
-Persons.helpers({
-    getFullName() {
-        return `${this.first_name} ${this.last_name}`;
+    helpers: {
+        fullName() {
+            return `${this.firstName} ${this.lastName}`;
+        }
     }
 });
 
-Persons.mutations({
-    setUserId(userId) {
-        return {$set: {userId: userId}};
-    }
-});
-
-export default Persons;
+export default Person;
