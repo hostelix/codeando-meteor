@@ -1,5 +1,5 @@
 import {Class} from 'meteor/jagi:astronomy';
-import {Persons} from '../collections/persons';
+import {Persons} from '../collections';
 
 const Person = Class.create({
     name: 'Person',
