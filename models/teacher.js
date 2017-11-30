@@ -14,7 +14,8 @@ const Teacher = Class.create({
         person() {
             return Person.findOne(this.personId);
         }
-    }
+    },
+    behaviors: ['timestamp']
 });
 
 export default Teacher;

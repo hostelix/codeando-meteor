@@ -1,4 +1,5 @@
 import {Class} from 'meteor/jagi:astronomy';
+import {Meteor} from 'meteor/meteor';
 import {Persons} from '../collections';
 
 const Person = Class.create({
@@ -28,10 +29,14 @@ const Person = Class.create({
         },
     },
     helpers: {
+        user() {
+            return Meteor.users.findOne(this.userId);
+        },
         fullName() {
             return `${this.firstName} ${this.lastName}`;
         }
-    }
+    },
+    behaviors: ['timestamp']
 });
 
 export default Person;
