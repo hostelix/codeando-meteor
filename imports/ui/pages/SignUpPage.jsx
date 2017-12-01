@@ -22,6 +22,7 @@ class SignUpPage extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.renderMessages = this.renderMessages.bind(this);
+        this.clearForm = this.clearForm.bind(this);
     }
 
     handleChangeField(nameField) {
@@ -32,30 +33,50 @@ class SignUpPage extends Component {
         }
     }
 
+    clearForm() {
+
+        this.setState(prevState => ({
+            form: {
+                ...prevState.form,
+                email: '',
+                username: '',
+                password: ''
+            }
+        }));
+
+        /*let form = {...this.state.form};
+        form.email = '';
+        form.username = '';
+        form.password = '';
+        this.setState({form});*/
+    }
+
     handleSubmit(e) {
         e.preventDefault();
 
         let {username, email, password} = this.state.form;
 
         Accounts.createUser({email: email, username: username, password: password}, (err) => {
+            let messageForm = {};
             if (err) {
                 console.log(err);
-                const messageForm = {
+                messageForm = {
                     message: err.reason,
                     type: "error"
                 };
-                this.setState({messageForm: messageForm, showMessages: true});
             } else {
-                const messageForm = {
+                messageForm = {
                     message: "Register Success",
                     type: "confirmation"
                 };
-                this.setState({messageForm: messageForm, showMessages: true});
 
+                this.clearForm();
                 setTimeout(() => {
                     //this.props.history.push('/signin');
                 }, 500);
+
             }
+            this.setState({messageForm: messageForm, showMessages: true});
         });
     }
 
