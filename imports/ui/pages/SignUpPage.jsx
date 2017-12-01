@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+import {Accounts} from 'meteor/accounts-base';
 import TextField from '@atlaskit/field-text';
 import Btn from '@atlaskit/button';
-import {Accounts} from 'meteor/accounts-base';
+import Page, {Grid, GridColumn} from '@atlaskit/page';
+import InlineMessage from '@atlaskit/inline-message';
 
 class SignUpPage extends Component {
 
@@ -13,10 +15,13 @@ class SignUpPage extends Component {
                 username: '',
                 email: '',
                 password: ''
-            }
+            },
+            showMessages: false,
+            messageForm: {}
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderMessages = this.renderMessages.bind(this);
     }
 
     handleChangeField(nameField) {
@@ -35,28 +40,63 @@ class SignUpPage extends Component {
         Accounts.createUser({email: email, username: username, password: password}, (err) => {
             if (err) {
                 console.log(err);
+                const messageForm = {
+                    message: err.reason,
+                    type: "error"
+                };
+                this.setState({messageForm: messageForm, showMessages: true});
             } else {
-                this.props.history.push('/signin');
+                const messageForm = {
+                    message: "Register Success",
+                    type: "confirmation"
+                };
+                this.setState({messageForm: messageForm, showMessages: true});
+
+                setTimeout(() => {
+                    //this.props.history.push('/signin');
+                }, 500);
             }
         });
     }
 
+    renderMessages() {
+        return this.state.showMessages ? (
+            <InlineMessage
+                title={this.state.messageForm.message}
+                type={this.state.messageForm.type}
+            >
+                <p>{this.state.messageForm.message}</p>
+            </InlineMessage>
+        ) : '';
+    }
+
     render() {
         return (
-            <div>
-                <form>
-                    <TextField label="Username" value={this.state.form.username}
-                               onChange={this.handleChangeField("username")}/>
 
-                    <TextField label="Email" value={this.state.form.email}
-                               onChange={this.handleChangeField("email")}/>
+            <Page>
+                <Grid>
+                    <GridColumn medium={4}/>
+                    <GridColumn medium={4}>
+                        <h2>Sign Up</h2>
+                        <div>
+                            {this.renderMessages()}
+                            <form>
+                                <TextField label="Username" value={this.state.form.username}
+                                           onChange={this.handleChangeField("username")}/>
 
-                    <TextField label="Password" type="password" value={this.state.form.password}
-                               onChange={this.handleChangeField("password")}/>
-                    <br/>
-                    <Btn appearance="primary" onClick={this.handleSubmit}>Sign In</Btn>
-                </form>
-            </div>
+                                <TextField label="Email" value={this.state.form.email}
+                                           onChange={this.handleChangeField("email")}/>
+
+                                <TextField label="Password" type="password" value={this.state.form.password}
+                                           onChange={this.handleChangeField("password")}/>
+                                <br/>
+                                <Btn appearance="primary" onClick={this.handleSubmit}>Sign In</Btn>
+                            </form>
+                        </div>
+                    </GridColumn>
+                    <GridColumn medium={4}/>
+                </Grid>
+            </Page>
         );
     }
 }
