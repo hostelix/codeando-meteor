@@ -43,12 +43,6 @@ class SignUpPage extends Component {
                 password: ''
             }
         }));
-
-        /*let form = {...this.state.form};
-        form.email = '';
-        form.username = '';
-        form.password = '';
-        this.setState({form});*/
     }
 
     handleSubmit(e) {
