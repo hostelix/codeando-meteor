@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@atlaskit/button": "^5.4.13",
+    "@atlaskit/empty-state": "^0.1.1",
     "@atlaskit/field-text": "^4.1.2",
     "@atlaskit/inline-message": "^3.0.4",
     "@atlaskit/page": "^5.0.4",
